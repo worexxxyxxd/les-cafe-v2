@@ -230,7 +230,7 @@
 
   /* ---------- размер ---------- */
   // раскладка: на широком экране объект справа от текста, на узком — сверху по центру
-  const LAYOUT = { home:[2.1,3.75,1,.6], burger:[1.45,2.75,1,.62], fire:[.2,1.4,1,.8], pin:[.2,1.2,1,.75] };
+  const LAYOUT = { home:[2.1,3.75,1,.6,1.3,.46], burger:[1.45,2.75,1,.62], fire:[.2,1.4,1,.8], pin:[.2,1.2,1,.75] };
   let narrow = mobile, baseY = 0, baseS = 1;
   const touch = matchMedia("(hover:none) and (pointer:coarse)").matches;
   let lastW = 0;
@@ -246,8 +246,8 @@
     camera.fov = narrow ? 62 : 48; camera.updateProjectionMatrix();
     camBase.z = narrow ? 8.2 : 7;
     const L = LAYOUT[mode]; if(!L) return;
-    baseY = narrow ? L[1] : L[0]; baseS = narrow ? L[3] : L[2];
-    const hx = narrow ? 0 : Math.min(3.2, 1.7*camera.aspect);
+    baseY = narrow ? L[1] : L[0]; baseS = narrow ? (L[5] || L[3]) : L[2];
+    const hx = narrow ? (L[4] || 0) : Math.min(3.2, 1.7*camera.aspect);   // на телефоне шаверма правее, не под текстом
     hero.position.set(hx, baseY, 0); hero.scale.setScalar(baseS);
     if(embers) embers.userData.origin.x = hx;
     if(mode==="fire"){ warm.position.x = hx; embers.userData.origin.y = baseY + .6; }

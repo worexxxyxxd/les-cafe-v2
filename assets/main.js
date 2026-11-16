@@ -174,7 +174,7 @@
   /* ---------- carousel dots (mobile) ---------- */
   function bindDots(){
     $$("[data-dots]").forEach(dots=>{
-      const track = document.getElementById(dots.dataset.dots); if(!track || !track.children.length) return;
+      const track = document.getElementById(dots.dataset.dots); if(!track || !track.children.length || track.dataset.reviews) return;
       const n = track.children.length; dots.innerHTML = Array.from({length:n},()=>"<i></i>").join("");
       const upd = ()=>{ const w = track.children[0].getBoundingClientRect().width + 14;
         const i = Math.round(track.scrollLeft / w); $$("i",dots).forEach((d,k)=>d.classList.toggle("on",k===Math.min(i,n-1))); };
@@ -335,7 +335,42 @@
     const fm = $("#fMap"); if(fm) fm.src = `https://yandex.ru/map-widget/v1/?ll=${F.lon}%2C${F.lat}&z=16&pt=${F.lon},${F.lat},pm2rdl`;
   }
 
-  renderHits(); renderPoints(); renderFranchise();
+  /* ---------- отзывы гостей по всем точкам ---------- */
+  function renderReviews(){
+    const track = $("#revTrack"); if(!track || !window.REVIEWS) return;
+    const P = Object.fromEntries(ALL.map(p=>[p.id,p]));
+    const card = r => { const p = P[r.p];
+      return `<figure class="review in" style="margin:0"><span class="rev-point">${ICON.pin}${p.address}</span><q>${r.text}</q>
+        <div class="who"><span class="ava">${r.name[0]}</span><div><b>${r.name}</b><span>Яндекс Карты · ${r.date}</span></div></div></figure>`; };
+    const dots = document.querySelector('[data-dots="revTrack"]');
+    function show(list){
+      track.innerHTML = list.map(card).join(""); track.scrollLeft = 0;
+      if(dots){ dots.innerHTML = list.map(()=>"<i></i>").join(""); if(dots.children[0]) dots.children[0].classList.add("on"); }
+    }
+    if(dots) track.addEventListener("scroll", ()=>{ const c = track.children[0]; if(!c) return;
+      const i = Math.round(track.scrollLeft / (c.getBoundingClientRect().width + 14));
+      [...dots.children].forEach((d,k)=>d.classList.toggle("on", k===Math.min(i, dots.children.length-1))); }, {passive:true});
+    if(track.dataset.reviews === "mix"){            // главная: по одному отзыву с каждой точки
+      const seen = new Set(); show(REVIEWS.filter(r=>!seen.has(r.p) && seen.add(r.p))); return;
+    }
+    const chips = $("#revChips"), link = $("#revLink");
+    const set = id => {
+      show(id==="all" ? REVIEWS : REVIEWS.filter(r=>r.p===id));
+      if(chips) $$("button", chips).forEach(b=>b.classList.toggle("active", b.dataset.p===id));
+      if(link){ const p = P[id];
+        link.href = `https://yandex.ru/maps/org/les/${(p||P.sof).org}/reviews/`;
+        link.textContent = p ? `Все отзывы: ${p.address} ↗` : "Все отзывы на Яндекс Картах ↗";
+        link.style.display = p ? "" : "none"; }
+    };
+    if(chips){
+      chips.innerHTML = `<button type="button" class="chip-btn" data-p="all">Все точки</button>` +
+        ALL.map(p=>`<button type="button" class="chip-btn" data-p="${p.id}">${p.name}</button>`).join("");
+      chips.addEventListener("click", e=>{ const b = e.target.closest("button"); if(b) set(b.dataset.p); });
+    }
+    set("all");
+  }
+
+  renderHits(); renderPoints(); renderFranchise(); renderReviews();
   renderMenu($("#menuRoot"), window.MENU, $("#chips"), $("#search"), $("#empty"));
   renderMenu($("#fMenuRoot"), window.MENU_FRANCHISE, $("#fChips"), null, null);
   updateStatus(); setInterval(updateStatus, 30000);

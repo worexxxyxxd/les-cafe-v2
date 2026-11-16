@@ -13,7 +13,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Ruslan+Display&display=swap" rel="stylesheet">
 <link rel="preload" href="assets/fonts/STIzhora.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/style.css">
-<link rel="stylesheet" href="assets/brand.css?v=5">
+<link rel="stylesheet" href="assets/brand.css?v=7">
 </head>
 <body data-page="about">
 <main>
@@ -77,13 +77,10 @@
     <div class="wrap">
       <div class="section-head reveal">
         <div><span class="eyebrow">Отзывы</span><h2>Слово <i>гостям</i></h2></div>
-        <a class="btn ghost" href="https://yandex.ru/maps/org/les/126400507925/reviews/" target="_blank" rel="noopener">Отзывы о Софийской ↗</a>
+        <a class="btn ghost" id="revLink" href="https://yandex.ru/maps/org/les/126400507925/reviews/" target="_blank" rel="noopener">Все отзывы на Яндекс Картах ↗</a>
       </div>
-      <div class="reviews" id="revTrack">
-        <figure class="review reveal" style="margin:0"><q>Шаверма очень вкусная, не слишком жирная, не сухая.</q><div class="who"><span class="ava">А</span><div><b>Анна</b><span>Яндекс Карты · 22 мая</span></div></div></figure>
-        <figure class="review reveal" data-d="1" style="margin:0"><q>Очень хороший тончайший лаваш. Процветания ребятам!</q><div class="who"><span class="ava">М</span><div><b>Максим А.</b><span>Яндекс Карты · 28 мая</span></div></div></figure>
-        <figure class="review reveal" data-d="2" style="margin:0"><q>Куски куры приятные, сочные. Тяжести после нет.</q><div class="who"><span class="ava">С</span><div><b>Слава Ё.</b><span>Яндекс Карты · 14 мая</span></div></div></figure>
-      </div>
+      <div class="rev-chips" id="revChips" aria-label="Отзывы по точкам"></div>
+      <div class="reviews" id="revTrack" data-reviews="all"></div>
       <div class="carousel-dots" data-dots="revTrack"></div>
     </div>
   </section>
@@ -107,12 +104,12 @@
   })();
 </script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.min.js"></script>
-<script src="assets/data.js"></script>
-<script src="assets/menu-data.js"></script>
+<script src="assets/data.js?v=7"></script>
+<script src="assets/menu-data.js?v=7"></script>
 <script src="assets/animals.js"></script>
 <script src="assets/features.js"></script>
-<script src="assets/main.js?v=3"></script>
-<script src="assets/scene.js?v=5"></script>
+<script src="assets/main.js?v=7"></script>
+<script src="assets/scene.js?v=7"></script>
 <script src="assets/mscroll.js?v=2"></script>
 </body>
 </html>
